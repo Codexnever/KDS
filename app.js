@@ -10,10 +10,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'mydatabase',
+  host: 'db2.cfikamem638x.ap-south-1.rds.amazonaws.com',
+  user: 'admin',
+  password: 'Medresto123',
+  database: 'mydb',
 });
 app.use(express.static('public'));
 

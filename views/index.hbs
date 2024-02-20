@@ -30,8 +30,8 @@
       max-height: 100vh;
       min-height: 50vh;
       overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: red transparent;
+      scrollbar-width: -45px;
+      scrollbar-color: rgb(255, 255, 255) transparent;
       background: #ffffff;
       border-radius: 10px;
       box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
@@ -147,7 +147,7 @@
     }
 
     .view-order-btn {
-     align-self: flex-end;
+      align-self: flex-end;
       width: 100%;
       border: none;
       background-color: #59a61f;
@@ -190,31 +190,41 @@
     .hidden {
       display: none;
     }
-        /* Add this style for the category filter section */
-.category-filter {
-  display: flex;
-margin-top: -24px;
-margin-left: -17px;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-.category-filter::-webkit-scrollbar {
-  display: none;
-}
-.subcategory-filter {
-  display: flex;
-margin-top: -24px;
-margin-left: -17px;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-.subcategory-filter::-webkit-scrollbar {
-  display: none;
-}
 
-/*
+    /* Add this style for the category filter section */
+    .category-filter {
+      display: flex;
+      margin-top: -24px;
+      margin-left: -17px;
+      overflow-x: auto;
+      /* Enable horizontal scrolling */
+      padding: 10px;
+      padding-bottom: -11px;
+     
+    }
+
+    .category-filter::-webkit-scrollbar {
+      display: none;
+      width: 2px;
+    }
+
+    .subcategory-filter {
+      display: flex;
+      padding-top: 0px;
+      margin-top: -24px;
+      margin-left: -17px;
+      overflow-x: auto;
+      /* Enable horizontal scrolling */
+      padding: 10px;
+     
+    }
+
+    .subcategory-filter::-webkit-scrollbar {
+      display: none;
+      width: 1px;
+    }
+
+    /*
 .category-filter2 {
 display: flex;
 margin-top: 5px;
@@ -228,17 +238,18 @@ border-bottom: 1px solid #ccc;
 }
 */
 
-.category-btn {
-  white-space: nowrap; /* Prevent button text from wrapping */
-  margin-right: 10px; /* Add some space between buttons */
-  background-color: #59a61f;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
-  cursor: pointer;
-}
-
+    .category-btn {
+      white-space: nowrap;
+      /* Prevent button text from wrapping */
+      margin-right: 10px;
+      /* Add some space between buttons */
+      background-color: #59a61f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+         padding: 5px 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -253,15 +264,20 @@ border-bottom: 1px solid #ccc;
       <div id="categoryHeaderContainer">
         <h5 style="color: black; margin-top: -20px; margin-bottom: 15px;">Category</h5>
       </div>
+  
 
   <div class="category-filter">
  {{#each categories}}
     <button class="category-btn" onclick="handleCategoryClick('{{category}}')">{{category}}</button>
   {{/each}}
   </div> 
+      <div id="categoryHeaderContainer">
+        <h5 style="color: black; margin-top: -10px; margin-bottom: 0px;">Sub-Category</h5>
+      </div>
+  
 
-<div class="subcategory-filter " style="margin-top: 10px;" >
-<h5 style="color: black; margin-top: -20px; margin-bottom: 15px;">subCategory</h5>
+<div class="subcategory-filter " style="margin-top: -13px;" >
+<h5 style="color: black; margin-top: 0px; margin-bottom: 10px;">subCategorqy</h5>
 {{#each subcategories}}
   <button class="category-btn" style="width: 50px; height:30px;" data-subcategory="{{this}}">{{this}}</button>
 {{/each}}
@@ -635,22 +651,40 @@ document.getElementById('itemsContainer').addEventListener('click', function (ev
     redirectToSecondPage();
   }
 });
+$('.quantity').on('click', '.plus', function (e) {
+  let $input = $(this).prev('input.qty');
+  let val = parseInt($input.val());
+  $input.val(val + 1).change();
 
-  $('.quantity').on('click', '.plus', function (e) {
-    let $input = $(this).prev('input.qty');
-    let val = parseInt($input.val());
-    $input.val(val + 1).change();
+  // Retrieve the itemRow associated with the clicked plus button
+  let itemRow = $(this).closest('.item-row')[0];
+  if (!itemRow) {
+    console.error('Error: Item row not found.');
+    return;
+  }
+
+  toggleAdjust(itemRow.querySelector('.btn-primary'));
+});
+
+$('.quantity').on('click', '.minus', function (e) {
+  let $input = $(this).next('input.qty');
+  let val = parseInt($input.val());
+  if (val > 0) {
+    $input.val(val - 1).change();
+
+    // Retrieve the itemRow associated with the clicked minus button
+    let itemRow = $(this).closest('.item-row')[0];
+    if (!itemRow) {
+      console.error('Error: Item row not found.');
+      return;
+    }
+
     toggleAdjust(itemRow.querySelector('.btn-primary'));
-  });
+  }
+});
 
-  $('.quantity').on('click', '.minus', function (e) {
-    let $input = $(this).next('input.qty');
-    var val = parseInt($input.val());
-    if (val > 0) {
-      $input.val(val - 1).change();
-      toggleAdjust(itemRow.querySelector('.btn-primary'));
-          }
-        });
+
+
       });
   
   </script>
